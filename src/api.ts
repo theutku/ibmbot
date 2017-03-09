@@ -10,7 +10,7 @@ class SlackBotApp {
 
     private botkit = require('botkit');
     private controller: botkit.slackbot;
-    private personality_insights: watson.personality_insights;
+    private personality_insights;
 
     loadBot() {
         return new Promise((resolve, reject) => {
@@ -25,14 +25,6 @@ class SlackBotApp {
             });
         })
 
-    }
-
-    loadWatson() {
-        this.personality_insights = watson.personality_insights({
-            username: process.env.watson_username,
-            password: process.env.watson_password,
-            version: 'v2'
-        });
     }
 
     testRoute() {
@@ -140,7 +132,6 @@ class SlackBotApp {
                 console.log(`App started listening at port: ${this.app.get('port')} ...`);
                 this.testRoute().then(() => {
                     this.loadBot().then(() => {
-                        this.loadWatson();
                         console.log('Bot initialized...');
                         this.basicInteraction().then(() => {
                             resolve();
@@ -162,6 +153,11 @@ class SlackBotApp {
         this.controller = this.botkit.slackbot({
             debug: false,
             retry: true
+        });
+        this.personality_insights = watson.personality_insights({
+            username: process.env.watson_username,
+            password: process.env.watson_password,
+            version: 'v2'
         });
 
     }
