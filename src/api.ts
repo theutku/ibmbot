@@ -10,6 +10,7 @@ class SlackBotApp {
 
     private botkit = require('botkit');
     private controller: botkit.slackbot;
+    private personality_insights: watson.personality_insights;
 
     loadBot() {
         return new Promise((resolve, reject) => {
@@ -24,6 +25,14 @@ class SlackBotApp {
             });
         })
 
+    }
+
+    loadWatson() {
+        this.personality_insights = watson.personality_insights({
+            username: process.env.watson_username,
+            password: process.env.watson_password,
+            version: 'v2'
+        });
     }
 
     testRoute() {
@@ -43,13 +52,7 @@ class SlackBotApp {
     basicInteraction() {
         return new Promise((resolve, reject) => {
 
-            var personality_insights = watson.personality_insights({
-                username: process.env.watson_username,
-                password: process.env.watson_password,
-                version: 'v2'
-            });
-
-            this.controller.hears(['Hi Watson'], ['direct_message', 'direct_mention'], function (bot, message) {
+            this.controller.hears(['Hi Watson', 'hey', 'hello', 'hi there', 'howdy'], ['direct_message', 'direct_mention'], function (bot, message) {
 
                 bot.reply(message, 'Hi!');
 
@@ -91,7 +94,7 @@ class SlackBotApp {
                     // call the watson api with your text
                     var corpus = messages.join("\n");
 
-                    personality_insights.profile(
+                    this.personality_insights.profile(
                         {
                             text: corpus,
                             language: 'en'
@@ -137,6 +140,7 @@ class SlackBotApp {
                 console.log(`App started listening at port: ${this.app.get('port')} ...`);
                 this.testRoute().then(() => {
                     this.loadBot().then(() => {
+                        this.loadWatson();
                         console.log('Bot initialized...');
                         this.basicInteraction().then(() => {
                             resolve();
