@@ -1,1 +1,1 @@
-# Slack Bot Trial App
+# Slack Bot Trial with IBM Watson Personality Insight
