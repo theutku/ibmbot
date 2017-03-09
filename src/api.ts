@@ -10,11 +10,6 @@ class SlackBotApp {
 
     private botkit = require('botkit');
     private controller: botkit.slackbot;
-    private personality_insights = watson.personality_insights({
-        username: process.env.watson_username,
-        password: process.env.watson_password,
-        version: 'v2'
-    });
 
     loadBot() {
         return new Promise((resolve, reject) => {
@@ -47,6 +42,12 @@ class SlackBotApp {
 
     basicInteraction() {
         return new Promise((resolve, reject) => {
+
+            var personality_insights = watson.personality_insights({
+                username: process.env.watson_username,
+                password: process.env.watson_password,
+                version: 'v2'
+            });
 
             this.controller.hears(['Hi Watson', 'hey', 'hi', 'hello', 'hi there', 'howdy'], ['direct_message', 'direct_mention'], function (bot, message) {
 
@@ -90,7 +91,7 @@ class SlackBotApp {
                     // call the watson api with your text
                     var corpus = messages.join("\n");
 
-                    this.personality_insights.profile(
+                    personality_insights.profile(
                         {
                             text: corpus,
                             language: 'en'
