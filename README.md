@@ -1,1 +1,1 @@
-# ibmbot
+# Slack Bot Trial App

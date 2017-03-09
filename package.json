@@ -1,0 +1,38 @@
+{
+  "name": "slackbotinit",
+  "version": "1.0.0",
+  "description": "slackbot trial",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./bin/app",
+    "postinstall": "gulp tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theutku/slackbotinit.git"
+  },
+  "keywords": [
+    "bot",
+    "slack",
+    "slackbot",
+    "botkit"
+  ],
+  "author": "theutku",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theutku/slackbotinit/issues"
+  },
+  "homepage": "https://github.com/theutku/slackbotinit#readme",
+  "dependencies": {
+    "@types/es6-promise": "0.0.32",
+    "@types/express": "^4.0.35",
+    "botkit": "^0.5.1",
+    "express": "^4.15.2",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.5",
+    "ts-node": "^2.1.0",
+    "typescript": "^2.2.1",
+    "watson-developer-cloud": "^2.25.1"
+  }
+}

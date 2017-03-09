@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "watch": true,
+        "declaration": false,
+        "listFiles": false,
+        "target": "ES5",
+        "module": "commonjs",
+        "noEmitOnError": false,
+        "noImplicitAny": false,
+        "experimentalDecorators": true,
+        "rootDir": "src",
+        "outDir": "bin",
+        "sourceMap": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "removeComments": true
+    },
+    "exclude": [
+        "node_modules/"
+    ]
+}

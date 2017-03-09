@@ -1,0 +1,9 @@
+# Dependency directories
+node_modules
+typings
+bin
+.vscode
+
+
+#Misc
+README.md
