@@ -10,7 +10,11 @@ class SlackBotApp {
 
     private botkit = require('botkit');
     private controller: botkit.slackbot;
-    private personality_insights;
+    private personality_insights = watson.personality_insights({
+        username: process.env.watson_username,
+        password: process.env.watson_password,
+        version: 'v2'
+    });
 
     loadBot() {
         return new Promise((resolve, reject) => {
@@ -153,11 +157,6 @@ class SlackBotApp {
         this.controller = this.botkit.slackbot({
             debug: false,
             retry: true
-        });
-        this.personality_insights = watson.personality_insights({
-            username: process.env.watson_username,
-            password: process.env.watson_password,
-            version: 'v2'
         });
 
     }
