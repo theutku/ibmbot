@@ -44,7 +44,7 @@ class SlackBotApp {
     basicInteraction() {
         return new Promise((resolve, reject) => {
 
-            this.controller.hears(['Hi Watson', 'hey', 'hello', 'hi there', 'howdy'], ['direct_message', 'direct_mention'], function (bot, message) {
+            this.controller.hears(['Hi Watson', 'hey', 'hi', 'hello', 'hi there', 'howdy'], ['direct_message', 'direct_mention'], function (bot, message) {
 
                 bot.reply(message, 'Hi!');
 
