@@ -14,7 +14,7 @@ class SlackBotApp {
     loadBot() {
         return new Promise((resolve, reject) => {
             this.controller.spawn({
-                token: 'xoxb-151309714433-BIxHMXLIjtmgr2V4n5JNGvZL'
+                token: process.env.slack_token
             }).startRTM((err, bot, payload) => {
                 if (err) {
                     console.log('Cannot connect to Slack.');
@@ -44,8 +44,8 @@ class SlackBotApp {
         return new Promise((resolve, reject) => {
 
             var personality_insights = watson.personality_insights({
-                username: '6c13d5e2-e530-451a-af4b-4c62ea28f121',
-                password: 'TpgMmixTW5Yn',
+                username: process.env.watson_username,
+                password: process.env.watson_password,
                 version: 'v2'
             });
 
