@@ -88,7 +88,7 @@ class WatsonBase extends BotBase {
 
     insightInit(bot, message) {
         var self = this;
-        bot.reply(message, 'Hi! I can only help you with the Channel Personality Insight. If you would like to learn about MiBo and get consultancy, please direct message me!');
+        bot.reply(message, 'In the channels, I can only help you with the Channel Personality Insight. If you would like to learn about MiBo and get consultancy, please direct message me!');
 
         bot.startConversation(message, function (task, convo) {
             convo.ask('Would you like to learn about Personality Insights?', [
