@@ -54,7 +54,7 @@ class SlackBotApp {
 
     watsonMessage(message: string): Promise<string> {
         return this.conversation.message({
-            workspace_id: 'df375b4b-8d78-47e8-b58a-5da81121b573',
+            workspace_id: process.env.workspaceId,
             input: { 'text': message },
             context: this.context
         }, (err, response) => {
