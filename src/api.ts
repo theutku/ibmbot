@@ -10,6 +10,8 @@ class SlackBotApp {
 
     private botkit = require('botkit');
     private controller: botkit.slackbot;
+    conversation;
+    context: object = {}
 
     loadBot() {
         return new Promise((resolve, reject) => {
@@ -26,6 +28,47 @@ class SlackBotApp {
 
     }
 
+    loadConversations() {
+        return new Promise((resolve, reject) => {
+            var conversation = watson.conversation({
+                username: process.env.conv_username,
+                password: process.env.conv_password,
+                version: 'v1',
+                version_date: '2016-09-20'
+            });
+            this.conversation = conversation;
+            resolve();
+        })
+
+    }
+
+    // promptUser(question: string, callback: Function) {
+    //     var stdin = process.stdin;
+    //     var stdout = process.stdout;
+    //     stdin.resume();
+    //     stdout.write(question);
+    //     stdin.once('data', (data) => {
+    //         callback(data.toString().trim());
+    //     });
+    // }
+
+    watsonMessage(message: string): Promise<string> {
+        return this.conversation.message({
+            workspace_id: 'df375b4b-8d78-47e8-b58a-5da81121b573',
+            input: { 'text': message },
+            context: this.context
+        }, (err, response) => {
+            if (err) {
+                console.log('Error: ', err);
+            } else {
+                console.log('Watson: ' + response.output.text[0]);
+
+                this.context = response.context;
+                return response;
+            }
+        });
+    }
+
     testRoute() {
         return new Promise((resolve, reject) => {
             this.app.get('/', (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -38,6 +81,17 @@ class SlackBotApp {
             resolve();
         })
 
+    }
+
+    watsonInteraction() {
+        return new Promise((resolve, reject) => {
+            this.controller.hears('', ['direct_mention'], (bot, message) => {
+                this.watsonMessage(message.text).then((res) => {
+                    bot.reply(res);
+                })
+            })
+            resolve();
+        })
     }
 
     basicInteraction() {
@@ -137,15 +191,30 @@ class SlackBotApp {
                 console.log(`App started listening at port: ${this.app.get('port')} ...`);
                 this.testRoute().then(() => {
                     this.loadBot().then(() => {
-                        console.log('Bot initialized...');
-                        this.basicInteraction().then(() => {
-                            resolve();
+                        console.log('Slack Bot initialized...');
+                        this.loadConversations().then(() => {
+                            this.watsonInteraction().then(() => {
+                                console.log('Watson initialized...')
+                                resolve();
+                            })
                         })
                     }).catch((err) => {
                         console.log('Error: Cannot connect to Slack.');
                         process.exit(2);
                     })
                 })
+
+                // this.testRoute().then(() => {
+                //     this.loadBot().then(() => {
+                //         console.log('Bot initialized...');
+                //         this.basicInteraction().then(() => {
+                //             resolve();
+                //         })
+                //     }).catch((err) => {
+                //         console.log('Error: Cannot connect to Slack.');
+                //         process.exit(2);
+                //     })
+                // })
 
             })
 
