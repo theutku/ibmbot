@@ -85,8 +85,9 @@ class SlackBotApp {
 
     watsonInteraction() {
         return new Promise((resolve, reject) => {
-            this.controller.hears('', ['direct_mention'], (bot, message) => {
+            this.controller.hears('', ['direct_mention', 'direct_message'], (bot, message) => {
                 var res = this.watsonMessage(message.text)
+                console.log(res);
                 bot.reply(res);
             })
             resolve();
