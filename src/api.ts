@@ -88,7 +88,7 @@ class SlackBotApp {
             this.controller.hears('', ['direct_mention', 'direct_message'], (bot, message) => {
                 var res = this.watsonMessage(message.text)
                 console.log(res);
-                bot.reply(res);
+                bot.reply(message, res);
             })
             resolve();
         })
