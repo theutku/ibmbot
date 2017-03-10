@@ -147,7 +147,25 @@ class WatsonBase extends BotBase {
     }
 
     init() {
-
+        return new Promise((resolve, reject) => {
+            this.loadBot().then(() => {
+                console.log('Slack Bot initialized...');
+                this.loadConversations().then(() => {
+                    this.watsonInteraction().then(() => {
+                        this.personalityInsight().then(() => {
+                            console.log('Watson initialized...')
+                            resolve();
+                        }).catch((err) => {
+                            reject(err);
+                            console.log('Basic Interaction Error: ', err);
+                        })
+                    })
+                })
+            }).catch((err) => {
+                console.log('Error: Cannot connect to Slack.');
+                reject(err);
+            })
+        })
     }
 
     constructor() {

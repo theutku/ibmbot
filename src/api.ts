@@ -35,21 +35,9 @@ class SlackBotApp {
                 }
                 console.log(`App started listening at port: ${this.app.get('port')} ...`);
                 this.testRoute().then(() => {
-                    WatsonBase.loadBot().then(() => {
-                        console.log('Slack Bot initialized...');
-                        WatsonBase.loadConversations().then(() => {
-                            WatsonBase.watsonInteraction().then(() => {
-                                WatsonBase.personalityInsight().then(() => {
-                                    console.log('Watson initialized...')
-                                    resolve();
-                                }).catch((err) => {
-                                    console.log('Basic Interaction Error: ', err);
-                                    process.exit(2);
-                                })
-                            })
-                        })
+                    WatsonBase.init().then(() => {
+                        resolve()
                     }).catch((err) => {
-                        console.log('Error: Cannot connect to Slack.');
                         process.exit(2);
                     })
                 })
