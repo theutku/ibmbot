@@ -52,7 +52,7 @@ class SlackBotApp {
     //     });
     // }
 
-    watsonMessage(message: string): Promise<string> {
+    watsonMessage(message: string) {
         return this.conversation.message({
             workspace_id: process.env.workspaceId,
             input: { 'text': message },
@@ -86,9 +86,8 @@ class SlackBotApp {
     watsonInteraction() {
         return new Promise((resolve, reject) => {
             this.controller.hears('', ['direct_mention'], (bot, message) => {
-                this.watsonMessage(message.text).then((res) => {
-                    bot.reply(res);
-                })
+                var res = this.watsonMessage(message.text)
+                bot.reply(res);
             })
             resolve();
         })
