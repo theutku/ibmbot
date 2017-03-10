@@ -53,7 +53,7 @@ class SlackBotApp {
     // }
 
     watsonMessage(message: string) {
-        return this.conversation.message({
+        this.conversation.message({
             workspace_id: process.env.workspaceId,
             input: { 'text': message },
             context: this.context
