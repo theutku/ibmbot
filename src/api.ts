@@ -64,7 +64,7 @@ class SlackBotApp {
                 console.log('Watson: ' + response.output.text[0]);
 
                 this.context = response.context;
-                return response;
+                return response.output.text[0];
             }
         });
     }
