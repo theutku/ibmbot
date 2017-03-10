@@ -48,23 +48,28 @@ class WatsonBase extends BotBase {
     watsonInteraction() {
         return new Promise((resolve, reject) => {
             this.controller.hears('', ['direct_mention', 'direct_message'], (bot, message) => {
-
-                this.watsonMessage(message.text.toString().trim()).then((res) => {
-                    if (typeof res !== 'undefined') {
-                        if (this.intent == 'perform_insight') {
-                            this.insightInit(bot, message);
+                if (message.text.includes('<')) {
+                    console.log(message.text);
+                    var user = message.text.substring(message.text.lastIndexOf("<"), message.text.lastIndexOf(">") + 1);
+                    console.log(user);
+                    this.miboPlanRequest(bot, message, user);
+                } else {
+                    this.watsonMessage(message.text.toString().trim()).then((res) => {
+                        if (typeof res !== 'undefined') {
+                            if (this.intent == 'perform_insight') {
+                                this.insightInit(bot, message);
+                            } else {
+                                console.log(this.context);
+                                bot.reply(message, res);
+                            }
                         } else {
-                            console.log(this.context);
-                            bot.reply(message, res);
+                            bot.reply(message, 'Could not get response from Watson.');
                         }
-                    } else {
+                    }).catch((err) => {
                         bot.reply(message, 'Could not get response from Watson.');
-                    }
-                }).catch((err) => {
-                    bot.reply(message, 'Could not get response from Watson.');
-                    reject(err);
-                })
-
+                        reject(err);
+                    })
+                }
             })
             resolve();
         })
@@ -84,6 +89,29 @@ class WatsonBase extends BotBase {
             resolve();
         })
 
+    }
+
+    miboPlanRequest(bot, message, user) {
+        var self = this;
+        bot.startConversation(message, function (task, convo) {
+            convo.ask('Hello ' + user + '! This is the first time i have seen you around! Can i interest you on MiBo?', [
+                {
+                    callback: function (response, convo) {
+                        console.log('YES'); convo.say('Great, a new beginning! So would you like the plans first or the consultancies?');
+                        convo.next();
+                    },
+                    pattern: bot.utterances.yes,
+                },
+                {
+                    callback: function (response, convo) { console.log('NO'); convo.say("Alright, but you're missing out!"); convo.next(); },
+                    pattern: bot.utterances.no,
+                },
+                {
+                    default: true,
+                    callback: function (response, convo) { console.log('DEFAULT'); convo.say('Huh?'); convo.repeat(); convo.next(); }
+                }
+            ])
+        })
     }
 
     insightInit(bot, message) {
