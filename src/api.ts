@@ -88,7 +88,7 @@ class SlackBotApp {
             this.controller.hears('', ['direct_mention', 'direct_message'], (bot, message) => {
                 var res = this.watsonMessage(message.text.toString().trim());
                 console.log(res);
-                if (res) {
+                if (typeof res !== 'undefined') {
                     bot.reply(message, res);
                 } else {
                     bot.reply(message, 'Could not get response from Watson.');
