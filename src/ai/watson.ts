@@ -32,7 +32,7 @@ class WatsonBase extends BotBase {
                     reject(err);
                 } else {
                     console.log('Watson: ' + response.output.text[0]);
-
+                    console.log('User Intent: ', response.intents[0].intent);
                     this.context = response.context;
                     resolve(response.output.text[0]);
                 }
@@ -54,6 +54,7 @@ class WatsonBase extends BotBase {
                     }
                 }).catch((err) => {
                     bot.reply(message, 'Could not get response from Watson.');
+                    reject(err);
                 })
 
             })
@@ -159,6 +160,9 @@ class WatsonBase extends BotBase {
                             reject(err);
                             console.log('Basic Interaction Error: ', err);
                         })
+                    }).catch((err) => {
+                        console.log('Watson Message Error: ', err);
+                        reject(err);
                     })
                 })
             }).catch((err) => {
